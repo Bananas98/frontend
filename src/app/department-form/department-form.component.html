@@ -1,0 +1,21 @@
+<h1 *ngIf="isAddMode">Add Department</h1>
+<h1 *ngIf="!isAddMode">Edit Department</h1>
+
+<div class="col-md-6">
+  <form>
+
+    <div *ngIf="isAddMode" class="form-group">
+      <label>Name:</label>
+      <input type="name" formControlName="name" placeholder="Name" name="name" class="form-control">
+    </div>
+
+    <div *ngIf="!isAddMode" class="form-group">
+      <label>Name:</label>
+      <input type="name" formControlName ="name" placeholder="Name" name="name" class="form-control">
+    </div>
+
+
+    <button *ngIf="isAddMode" class="btn btn-success" (click)="createDepartment()">Create</button>
+    <button *ngIf="isAddMode" class="btn btn-success" (click)="updateDepartment()">Update</button>
+  </form>
+</div>

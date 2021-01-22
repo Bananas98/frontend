@@ -1,0 +1,25 @@
+<div class="col-md-6">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Date of Birthday</th>
+      <th>Email</th>
+      <th>Salary</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let employee of employees">
+      <td>{{employee.empId}}</td>
+      <td>{{employee.name}}</td>
+      <td>{{employee.date}}</td>
+      <td>{{employee.mail}}</td>
+      <td>{{employee.salary}}</td>
+<!--      передать скрыто id департамента-->
+      <a routerLink="department/{{employee.empId}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+      <td><button class="btn btn-danger" (click)="deleteEmployee(employee.empId)"> Delete Employee</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
