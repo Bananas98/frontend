@@ -3,7 +3,7 @@ import {DepartmentService} from "../departmentService/department.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {EmployeeService} from "../employeeService/employee.service";
-import {Department} from "../models/Department";
+import {MyValidator} from "../validator/Validator";
 
 @Component({
   selector: 'app-employees-form',
@@ -21,6 +21,15 @@ export class EmployeesFormComponent implements OnInit {
     private employeeService: EmployeeService,
     private departmentService: DepartmentService,
     private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    this.departmentService.getDepartments().subscribe(
+      response => {
+        this.departmentsList = response.data;
+      });
+    this.empId = this.route.snapshot.params['empId'];
+
     this.employeeForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -32,21 +41,15 @@ export class EmployeesFormComponent implements OnInit {
       ]),
       salary: new FormControl('', [
         Validators.required,
+        Validators.min(0),
         Validators.pattern("/^(\d){1,13}$/g"),
+        MyValidator.minSalaryForTwenty
       ]),
       email: new FormControl('', [
         Validators.required,
         Validators.email
       ])
     })
-  }
-
-  ngOnInit() {
-    this.departmentService.getDepartments().subscribe(
-      response => {
-        this.departmentsList = response.data;
-      });
-    this.empId = this.route.snapshot.params['empId'];
   }
 
 

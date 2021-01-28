@@ -16,6 +16,11 @@ export class DepartmentFormComponent implements OnInit {
   constructor(
     private departmentService: DepartmentService,
     private route: ActivatedRoute) {
+  }
+
+
+  ngOnInit() {
+    this.id = this.route.snapshot.params['id'];
     this.departmentForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -23,10 +28,6 @@ export class DepartmentFormComponent implements OnInit {
         Validators.maxLength(20),
       ])
     })
-  }
-
-  ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
   }
 
 
