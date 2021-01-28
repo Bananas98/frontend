@@ -7,25 +7,39 @@ import {Department, DepartmentService} from "../departmentService/department.ser
   styleUrls: ['./departments-list.component.css']
 })
 export class DepartmentsListComponent implements OnInit {
-  departments: Department[];
 
-  constructor( private departmentService:DepartmentService) { }
+
+
+  constructor(private departmentService: DepartmentService) {}
+
+  departmentList: any = [];
+  department: any;
 
   ngOnInit() {
     this.departmentService.getDepartments().subscribe(
-      response =>this.handleSuccessfulResponse(response),
-    );
+      response => {
+        this.departmentList = response.data;
+      });
   }
 
-  handleSuccessfulResponse(response) {
-    this.departments=response;
-  }
-
-  deleteDepartment(id: string): void {
+  deleteDepartment(id: number): void {
     this.departmentService.deleteDepartment(id)
       .subscribe( data => {
-        this.departments = this.departments.filter(x => x.id !== id);
+        this.departmentList = this.departmentList.filter((x: Department) => x.id !== id);
       })
   };
+
+  updateClick(department) {
+    this.department = department;
+  }
+
+  addClick() {
+    this.department = {
+      Id: 0,
+      Name: ''
+    };
+  }
+
+
 
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DepartmentService} from "../departmentService/department.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {EmployeeService} from "../employeeService/employee.service";
+import {Department} from "../models/Department";
 
 @Component({
   selector: 'app-employees-form',
@@ -11,33 +12,54 @@ import {EmployeeService} from "../employeeService/employee.service";
 })
 export class EmployeesFormComponent implements OnInit {
 
-
-  form!: FormGroup;
-  id!: string;
-  isAddMode!: boolean;
+  @Input() employee: any;
+  employeeForm: FormGroup;
+  empId!: number;
+  departmentsList: any = [];
 
   constructor(
     private employeeService: EmployeeService,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-  ) {}
+    private departmentService: DepartmentService,
+    private route: ActivatedRoute) {
+    this.employeeForm = new FormGroup({
+      name: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(20),
+      ]),
+      date: new FormControl('', [
+        Validators.required,
+      ]),
+      salary: new FormControl('', [
+        Validators.required,
+        Validators.pattern("/^(\d){1,13}$/g"),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email
+      ])
+    })
+  }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params['empId'];
-    this.isAddMode = !this.id;
+    this.departmentService.getDepartments().subscribe(
+      response => {
+        this.departmentsList = response.data;
+      });
+    this.empId = this.route.snapshot.params['empId'];
   }
 
 
   createEmployee(): void {
-    this.employeeService.createEmployee(this.form.value)
-      .subscribe( data => {
+    this.employeeService.createEmployee(this.employeeForm.value)
+      .subscribe(data => {
         alert("Employee created successfully.");
       });
   };
 
   updateEmployee(): void {
-    this.employeeService.updateEmployee(this.id, this.form.value)
-      .subscribe( data => {
+    this.employeeService.updateEmployee(this.empId, this.employeeForm.value)
+      .subscribe(data => {
         alert("Employee update successfully.");
       });
   };

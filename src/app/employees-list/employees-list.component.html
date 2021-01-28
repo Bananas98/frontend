@@ -1,3 +1,11 @@
+<button type="button" class="btn btn-primary float-right m-2"
+        data-toggle="modal" data-target="#exampleModal" (click)="addClick()"
+        data-backdrop="static" data-keyboard="false">
+  Add new employee
+</button>
+<div class="modal-body">
+  <app-employees-form [employee]="employee"></app-employees-form>
+</div>
 <div class="col-md-6">
   <table class="table table-striped">
     <thead>
@@ -10,15 +18,19 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let employee of employees">
+    <tr *ngFor="let employee of employeeList">
       <td>{{employee.empId}}</td>
       <td>{{employee.name}}</td>
       <td>{{employee.date}}</td>
-      <td>{{employee.mail}}</td>
+      <td>{{employee.email}}</td>
       <td>{{employee.salary}}</td>
-<!--      передать скрыто id департамента-->
-      <a routerLink="department/{{employee.empId}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-      <td><button class="btn btn-danger" (click)="deleteEmployee(employee.empId)"> Delete Employee</button></td>
+      <td>
+        <button class="btn btn-light mr-1" type="button"
+                data-toggle="modal" data-target="#exampleModal" (click)="updateClick(employee)"
+                data-backdrop="static" data-keyboard="false">
+        </button>
+        <button class="btn btn-danger" (click)="deleteEmployee(employee.empId)"> Delete Employee</button>
+      </td>
     </tr>
     </tbody>
   </table>

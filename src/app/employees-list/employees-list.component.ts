@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Department, DepartmentService} from "../departmentService/department.service";
 import {Employee, EmployeeService} from "../employeeService/employee.service";
 
 @Component({
@@ -9,25 +8,35 @@ import {Employee, EmployeeService} from "../employeeService/employee.service";
 })
 export class EmployeesListComponent implements OnInit {
 
-  employees: Employee[];
+  employeeList: any = [];
+  employee: any;
 
   constructor( private employeeService:EmployeeService) { }
 
   ngOnInit() {
     this.employeeService.getEmployees().subscribe(
-      response =>this.handleSuccessfulResponse(response),
-    );
+      response => {
+        this.employeeList = response.data;
+      });
   }
 
-  handleSuccessfulResponse(response) {
-    this.employees=response;
-  }
-
-  deleteEmployee(id: string): void {
-    this.employeeService.deleteEmployee(employee)
+  deleteEmployee(id: number): void {
+    this.employeeService.deleteEmployee(id)
       .subscribe( data => {
-        this.employees = this.employees.filter(x => x.empId !== id);
+        this.employeeList = this.employeeList.filter((x: Employee) => x.id !== id);
       })
   };
+
+  updateClick(employee) {
+    this.employee = employee;
+  }
+
+  addClick() {
+    this.employee = {
+      id: 0,
+      name: ''
+    };
+
+  }
 
 }

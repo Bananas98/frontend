@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Department, DepartmentService} from "../departmentService/department.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-
-class AlertService {
-}
 
 @Component({
   selector: 'app-department-form',
@@ -12,33 +9,37 @@ class AlertService {
   styleUrls: ['./department-form.component.css']
 })
 export class DepartmentFormComponent implements OnInit {
-
-  form!: FormGroup;
-  id!: string;
-  isAddMode!: boolean;
+  @Input() department: any;
+  departmentForm: FormGroup;
+  id!: number;
 
   constructor(
     private departmentService: DepartmentService,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-  ) {}
+    private route: ActivatedRoute) {
+    this.departmentForm = new FormGroup({
+      name: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(20),
+      ])
+    })
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    this.isAddMode = !this.id;
   }
 
 
   createDepartment(): void {
-    this.departmentService.createDepartment(this.form.value)
-      .subscribe( data => {
+    this.departmentService.createDepartment(this.departmentForm.value)
+      .subscribe(data => {
         alert("Department created successfully.");
       });
   };
 
   updateDepartment(): void {
-    this.departmentService.updateDepartment(this.id, this.form.value)
-      .subscribe( data => {
+    this.departmentService.updateDepartment(this.id, this.departmentForm.value)
+      .subscribe(data => {
         alert("Department update successfully.");
       });
   };
