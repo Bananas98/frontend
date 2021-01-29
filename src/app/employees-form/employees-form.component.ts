@@ -4,6 +4,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {EmployeeService} from "../employeeService/employee.service";
 import {MyValidator} from "../validator/Validator";
+import validate = WebAssembly.validate;
 
 @Component({
   selector: 'app-employees-form',
@@ -43,13 +44,12 @@ export class EmployeesFormComponent implements OnInit {
         Validators.required,
         Validators.min(0),
         Validators.pattern("/^(\d){1,13}$/g"),
-        MyValidator.minSalaryForTwenty
       ]),
       email: new FormControl('', [
         Validators.required,
         Validators.email
       ])
-    })
+    }, MyValidator.minSalaryForTwenty)
   }
 
 

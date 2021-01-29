@@ -1,22 +1,23 @@
-import {AbstractControl, FormControl} from "@angular/forms";
+import {AbstractControl, FormControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import moment = require("moment/ts3.1-typings/moment");
 
 export class MyValidator {
 
-  static yearValidator(control: FormControl): {[key: string]: boolean} {
+  // static yearValidator(control: FormControl): { [key: string]: boolean } {
+  //
+  // }
 
-  }
+  static minSalaryForTwenty: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
 
-  static minSalaryForTwenty(control: FormControl): {[key: string]: boolean} {
-    if (control.value){
-      const date = 2001;
-      const  today =  moment().year();
-      if (today - date < 20){
-        if (control.value < 200)
+    const dateOfBirthday = control.get('date');
+    const salary = control.get('salary');
+    const today = moment().year();
+
+    if (today - new Date(dateOfBirthday?.value).getFullYear() < 20) {
+      if (salary?.value < 200)
         return {
           minSalaryForTwenty: true
         }
-      }
     }
     return null;
   }
